@@ -1,9 +1,12 @@
+from uuid import uuid4
+import json
 import pytest
 from sqlalchemy_utils import create_database, database_exists
 from fastapi.testclient import TestClient
 from app.database import create_session, Base
 from app.models import Bets
 from app import app
+from app.crud import BetStatus
 
 
 class TestSettings:
@@ -35,8 +38,18 @@ def app_client(cleanup_db):
 
 
 @pytest.fixture()
+def mock_uuid(app_client):
+    data = {"event_id": 2, "amount": 500}
+    response = app_client.post("/bets", data=json.dumps(data))
+    uuid = response.json()["uuid"]
+    yield uuid
+
+
+@pytest.fixture()
 def create_bet(db):
-    bet = Bets(event_id=2, amount=500)
+    bet = Bets(
+        event_id=2, amount=500, uuid=str(uuid4()), bet_status=BetStatus.PENDING.value
+    )
     db.add(bet)
     db.commit()
     yield bet

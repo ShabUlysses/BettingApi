@@ -8,5 +8,6 @@ class Bet(BaseModel):
 
 class BetResponse(BaseModel):
     uuid: str
+
     class Config:
         orm_mode = True

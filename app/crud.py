@@ -7,9 +7,9 @@ from uuid import uuid4
 
 
 class BetStatus(Enum):
-    PENDING = 'ещё не сыграла'
-    WIN = 'выиграла'
-    LOSE = 'проиграла'
+    PENDING = "ещё не сыграла"
+    WIN = "выиграла"
+    LOSE = "проиграла"
 
 
 def get_all_bets(db: Session):
@@ -18,7 +18,9 @@ def get_all_bets(db: Session):
 
 def create_bet(db: Session, event_id: int, amount: int):
     bet_status = BetStatus.PENDING.value
-    db_bet = models.Bets(event_id=event_id, amount=amount, uuid=str(uuid4()), bet_status=bet_status)
+    db_bet = models.Bets(
+        event_id=event_id, amount=amount, uuid=str(uuid4()), bet_status=bet_status
+    )
     db.add(db_bet)
     db.commit()
     return db_bet
@@ -30,4 +32,3 @@ def update_bets(db: Session, event_id: str, status: str):
     for bet in bets:
         bet.bet_status = bet_status
     db.commit()
-    return 202, "Successful"
