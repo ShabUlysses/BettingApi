@@ -1,7 +1,6 @@
-from typing import List, Dict
-
 from fastapi import Depends, FastAPI, HTTPException
 from sqlalchemy.orm import Session
+
 from . import crud, schemas
 from .database import get_db
 
